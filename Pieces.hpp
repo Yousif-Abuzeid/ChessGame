@@ -6,8 +6,8 @@ private:
     int col;
 public:
     Position(int r = 0, int c = 0) : row(r), col(c) {}
-    int getRow() const { return row; }
-    int getCol() const { return col; }
+    int getRow() const ;
+    int getCol() const ;
     bool isEquals(const Position& p) const ;
     void changePosition(int r, int c) ;
 };
