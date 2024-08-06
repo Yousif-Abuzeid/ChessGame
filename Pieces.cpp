@@ -32,34 +32,60 @@
     Methods For Pawn Class
     */
     bool Pawn::move(int r, int c) {
-        if(!check(r,c,isWhite)){
-            std::cout<<"invalid Move"<<std::endl;
-            return false;
-        }
-        if(FirstMove && (c==pos.getCol()+2 &&pos.getRow()==r)){
-            if(!check(r,c,!isWhite)){
-            std::cout<<"invalid Move"<<std::endl;
-            return false;
-        }else{
-            pos.changePosition(r, c);
-        }
-        }else if( c==pos.getCol()+1 && (pos.getRow()==r+1 ||pos.getRow()==r+1)){
-            if(!check(r,c,!isWhite)){
-                pos.changePosition(r, c);
-                kill(r, c);
-            std::cout<<"You Killed a Piece At ("<<r<<","<<c<<")"<<std::endl;
-            return true;
-        }else if(c==pos.getCol()+1 && pos.getRow()==r){
-            pos.changePosition(r, c);
-            return true;
-        }
-        }
+    // Check if the move is within the board and valid for the pawn's color
+    if (!check(r, c, isWhite)) {
+        std::cout << "Invalid Move" << std::endl;
         return false;
     }
+
+    int currentRow = pos.getRow();
+    int currentCol = pos.getCol();
+
+    // First move can be two squares forward
+    if (FirstMove && c == currentCol && abs(r - currentRow) == 2) {
+        if (!check(r, c, !isWhite)) { // Ensure no piece is blocking the move
+            pos.changePosition(r, c);
+            FirstMove = false;
+            return true;
+        } else {
+            std::cout << "Invalid Move" << std::endl;
+            return false;
+        }
+    }
+
+    // Normal move: one square forward
+    if (c == currentCol && r == currentRow + (isWhite ? 1 : -1)) {
+        if (!check(r, c, !isWhite)) {
+            pos.changePosition(r, c);
+            return true;
+        } else {
+            std::cout << "Invalid Move" << std::endl;
+            return false;
+        }
+    }
+
+    // Capture move: one square diagonally forward
+    if (abs(c - currentCol) == 1 && r == currentRow + (isWhite ? 1 : -1)) {
+        if (check(r, c, !isWhite)) { // Ensure there's an opponent piece to capture
+            pos.changePosition(r, c);
+            kill(r, c);
+            std::cout << "You Killed a Piece At (" << r << "," << c << ")" << std::endl;
+            return true;
+        } else {
+            std::cout << "Invalid Move" << std::endl;
+            return false;
+        }
+    }
+
+    // If none of the valid move conditions are met, return false
+    std::cout << "Invalid Move" << std::endl;
+    return false;
+}
+
     void Pawn::display() const  {
         std::cout << (isWhite ? "P" : "p");
     }
     void Pawn::promotion(){
         /*code*/
     }
-    
+
