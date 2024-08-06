@@ -28,9 +28,12 @@ public:
 
 
 class Pawn : public Piece {
+    private:
+    bool FirstMove;
 public:
-    Pawn(int r, int c, bool isWhite) : Piece(r, c, isWhite) {}
+    Pawn(int r, int c, bool isWhite) : Piece(r, c, isWhite),FirstMove(true) {}
     bool move(int r, int c) override;
+    void promotion();
     void display() const override ;
 };
 
