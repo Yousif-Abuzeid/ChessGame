@@ -104,7 +104,8 @@
         /*
         Rook's Movement Logic
         */
-        return false;
+        return false; 
+        
     }
     void Rook::display() const {
         std::cout << (isWhite ? "R" : "r");
