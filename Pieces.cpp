@@ -1,5 +1,5 @@
 #include "Pieces.hpp"
-#include "ChessBoard.hpp"
+//#include "ChessBoard.hpp"
 #include <iostream>
 
     bool check(int r, int c, bool isWhite);
@@ -7,6 +7,8 @@
     /*
     Methods For Position Class
     */
+    //constructor for Position class
+    Position::Position(int r , int c) : row(r), col(c) {}
     int Position:: getRow() const { return row; }
 
     int Position::getCol() const { return col; }
@@ -22,6 +24,8 @@
     /*
     Methods For Piece Class
     */
+    //constructor for piece class
+    Piece::Piece(int r, int c, bool isWhite) : pos(r, c), isWhite(isWhite), isAlive(true) {}
     bool Piece:: Alive() const{
         return isAlive;
     }
@@ -31,6 +35,8 @@
     /*
     Methods For Pawn Class
     */
+    //constructor for pawn class
+    Pawn::Pawn(int r, int c, bool isWhite) : Piece(r, c, isWhite),FirstMove(true) {}
     bool Pawn::move(int r, int c) {
     // Check if the move is within the board and valid for the pawn's color
     if (!check(r, c, isWhite)) {
@@ -89,3 +95,87 @@
         /*code*/
     }
 
+    /*
+    Methods For Rook Class
+    */
+    // constructor
+    Rook::Rook(int r, int c, bool isWhite) : Piece(r, c, isWhite) {}
+    bool Rook:: move(int r, int c){
+        /*
+        Rook's Movement Logic
+        */
+        return false;
+    }
+    void Rook::display() const {
+        std::cout << (isWhite ? "R" : "r");
+    }
+
+
+    /*
+    Methods For Knight Class
+    */
+    //constructor
+    Knight::Knight(int r, int c, bool isWhite) : Piece(r, c, isWhite) {}
+    bool Knight::move(int r, int c) {
+        /*
+        Knight's Movement Logic
+        */
+        return false;
+    }
+    void Knight::display() const{
+        std::cout << (isWhite ? "N" : "n");
+    };
+
+    /*
+    Methods For Bishop Class
+    */
+    //constructor
+    Bishop::Bishop(int r, int c, bool isWhite) : Piece(r, c, isWhite) {}
+    bool Bishop:: move(int r, int c) {
+        /*
+        Bishop's Movement Logic
+        */
+        return false;
+    }
+    void Bishop::display() const {
+        std::cout << (isWhite ? "B" : "b");
+    } ;
+
+    /*
+    Methods For Queen Class
+    */
+    Queen::Queen(int r, int c, bool isWhite) : Piece(r, c, isWhite) {}
+    bool Queen:: move(int r, int c) {
+        /*
+        Queen's Movement Logic
+        */
+        return false;
+    }
+    void Queen::display() const {
+        std::cout << (isWhite ? "Q" : "q");
+    }
+    /*
+    Methods For King Class
+    */
+    King::King(int r, int c, bool isWhite) : Piece(r, c, isWhite), isCheck(false) {}
+    bool King::move(int r, int c) {
+        /*
+        King's Movement Logic
+        */
+        return false;
+    }
+    void King::display() const{
+        std::cout << (isWhite ? "K" : "k");
+    }
+    bool King::isCheckMate(){
+        /*
+        Logic
+        */
+        return false;
+    }
+    bool King::isChecked(){
+        return isCheck;
+    }
+    void King::CheckKing(){
+        isCheck=true;
+    }
