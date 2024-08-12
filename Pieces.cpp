@@ -1,9 +1,9 @@
 #include "Pieces.hpp"
-//#include "ChessBoard.hpp"
 #include <iostream>
+#include <cmath> // For std::abs
+#include "ChessBoard.hpp"
 
-    bool check(int r, int c, bool isWhite);
-    void kill(int r,int c);
+   
     /*
     Methods For Position Class
     */
@@ -25,22 +25,29 @@
     Methods For Piece Class
     */
     //constructor for piece class
-    Piece::Piece(int r, int c, bool isWhite) : pos(r, c), isWhite(isWhite), isAlive(true) {}
+    Piece::Piece(int r, int c, bool isWhite ,bool isPawn=false) : pos(r, c), isWhite(isWhite), isAlive(true),pawn((isPawn)) {}
+
     bool Piece:: Alive() const{
         return isAlive;
     }
     void Piece::setAlive(bool alive){
         isAlive=alive;
     }
+    bool Piece::isWhitePiece() const {
+        return isWhite;
+    }
+    bool Piece::isPawn() const {
+        return pawn;
+    }
     /*
     Methods For Pawn Class
     */
     //constructor for pawn class
-    Pawn::Pawn(int r, int c, bool isWhite) : Piece(r, c, isWhite),FirstMove(true) {}
-    bool Pawn::move(int r, int c) {
+    Pawn::Pawn(int r, int c, bool isWhite) : Piece(r, c, isWhite,true),FirstMove(true) {}
+    bool Pawn::move(int r, int c,ChessBoard & board) {
     // Check if the move is within the board and valid for the pawn's color
-    if (!check(r, c, isWhite)) {
-        std::cout << "Invalid Move" << std::endl;
+    if (!board.check(r, c, isWhite)) {
+        std::cout << "You Can't be in the same block with one of Your Pieces" << std::endl;
         return false;
     }
 
@@ -49,42 +56,38 @@
 
     // First move can be two squares forward
     if (FirstMove && c == currentCol && abs(r - currentRow) == 2) {
-        if (!check(r, c, !isWhite)) { // Ensure no piece is blocking the move
+         // Ensure no piece is blocking the move
+        if(board.check(r, c, !isWhite)){
             pos.changePosition(r, c);
             FirstMove = false;
             return true;
-        } else {
-            std::cout << "Invalid Move" << std::endl;
-            return false;
         }
     }
 
     // Normal move: one square forward
     if (c == currentCol && r == currentRow + (isWhite ? 1 : -1)) {
-        if (!check(r, c, !isWhite)) {
-            pos.changePosition(r, c);
-            return true;
-        } else {
-            std::cout << "Invalid Move" << std::endl;
-            return false;
-        }
+            if(board.check(r, c, !isWhite)){
+                pos.changePosition(r, c);
+                return true;
+            }
+        
     }
+    
 
     // Capture move: one square diagonally forward
-    if (abs(c - currentCol) == 1 && r == currentRow + (isWhite ? 1 : -1)) {
-        if (check(r, c, !isWhite)) { // Ensure there's an opponent piece to capture
+    if ((abs(c - currentCol) == 1 && r == currentRow + (isWhite ? 1 : -1))&& board.check(r, c, isWhite)) {
+        // Ensure there's an opponent piece to capture
+        if(board.check(r, c, isWhite, true)){
             pos.changePosition(r, c);
-            kill(r, c);
+
             std::cout << "You Killed a Piece At (" << r << "," << c << ")" << std::endl;
             return true;
-        } else {
-            std::cout << "Invalid Move" << std::endl;
-            return false;
         }
-    }
+        std::cout << "You Can't be in the same block with one of Your Pieces" << std::endl;
+        }
+    
 
     // If none of the valid move conditions are met, return false
-    std::cout << "Invalid Move" << std::endl;
     return false;
 }
 
@@ -100,7 +103,7 @@
     */
     // constructor
     Rook::Rook(int r, int c, bool isWhite) : Piece(r, c, isWhite) {}
-    bool Rook:: move(int r, int c){
+    bool Rook:: move(int r, int c,ChessBoard & board){
         /*
         Rook's Movement Logic
         */
@@ -117,7 +120,7 @@
     */
     //constructor
     Knight::Knight(int r, int c, bool isWhite) : Piece(r, c, isWhite) {}
-    bool Knight::move(int r, int c) {
+    bool Knight::move(int r, int c,ChessBoard & board) {
         /*
         Knight's Movement Logic
         */
@@ -132,7 +135,7 @@
     */
     //constructor
     Bishop::Bishop(int r, int c, bool isWhite) : Piece(r, c, isWhite) {}
-    bool Bishop:: move(int r, int c) {
+    bool Bishop:: move(int r, int c,ChessBoard & board) {
         /*
         Bishop's Movement Logic
         */
@@ -146,7 +149,7 @@
     Methods For Queen Class
     */
     Queen::Queen(int r, int c, bool isWhite) : Piece(r, c, isWhite) {}
-    bool Queen:: move(int r, int c) {
+    bool Queen:: move(int r, int c,ChessBoard & board) {
         /*
         Queen's Movement Logic
         */
@@ -159,7 +162,7 @@
     Methods For King Class
     */
     King::King(int r, int c, bool isWhite) : Piece(r, c, isWhite), isCheck(false) {}
-    bool King::move(int r, int c) {
+    bool King::move(int r, int c,ChessBoard & board) {
         /*
         King's Movement Logic
         */
