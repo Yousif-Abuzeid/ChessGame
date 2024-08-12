@@ -46,10 +46,10 @@
     Pawn::Pawn(int r, int c, bool isWhite) : Piece(r, c, isWhite,true),FirstMove(true) {}
     bool Pawn::move(int r, int c,ChessBoard & board) {
     // Check if the move is within the board and valid for the pawn's color
-    if (!board.check(r, c, isWhite)) {
-        std::cout << "You Can't be in the same block with one of Your Pieces" << std::endl;
-        return false;
-    }
+    // if (!board.check(r, c, isWhite,true)) {
+    //     std::cout << "You Can't be in the same block with one of Your Pieces" << std::endl;
+    //     return false;
+    // }
 
     int currentRow = pos.getRow();
     int currentCol = pos.getCol();
@@ -75,9 +75,9 @@
     
 
     // Capture move: one square diagonally forward
-    if ((abs(c - currentCol) == 1 && r == currentRow + (isWhite ? 1 : -1))&& board.check(r, c, isWhite)) {
+    if ((abs(c - currentCol) == 1 && r == currentRow + (isWhite ? 1 : -1))&& board.check(r, c, isWhite ,true)) {
         // Ensure there's an opponent piece to capture
-        if(board.check(r, c, isWhite, true)){
+        if(board.check(r, c, isWhite, true)){   
             pos.changePosition(r, c);
 
             std::cout << "You Killed a Piece At (" << r << "," << c << ")" << std::endl;
