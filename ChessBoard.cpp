@@ -1,4 +1,5 @@
 #include "ChessBoard.hpp"
+#include "Pieces.hpp"
 #include <iostream>
 
 /*
@@ -67,12 +68,9 @@ bool ChessBoard::move(int r1, int c1, int r2, int c2){
         std::cout<<"Invalid Move5"<<std::endl;
     }
     if(board[r1][c1] == nullptr){
-        return false;
         std::cout<<"Invalid Move3"<<std::endl;
-    }
-    if(!check(r2, c2, board[r1][c1]->isWhitePiece())){
-        return false;
-        std::cout<<"Invalid Move4"<<std::endl;
+                return false;
+
     }
     // Use the move method from the piece class
     if(board[r1][c1]->move(r2, c2, *this)){
@@ -92,24 +90,77 @@ void ChessBoard::killPiece(int r, int c){
     /*delete ChessBoard::board[r][c];
     ChessBoard::board[r][c] = nullptr;*/
 }
-
 /*
-check function
+Check Pawn Move Valid
 */
-bool ChessBoard::check(int r, int c, bool isWhite, bool ForAkill){
-    if(ForAkill){
-        if (board[r][c] != nullptr && board[r][c]->isWhitePiece() != isWhite){
+bool CheckPawnMoveValid(int r,int c,ChessBoard& Board,bool isWhite,bool forAkilling=false){
+    if(forAkilling){
+        if (Board.board[r][c] != nullptr && Board.board[r][c]->isWhitePiece() != isWhite){
             return true;
         }
     }else{
-    if(board[r][c] != nullptr && board[r][c]->isWhitePiece() == isWhite){
+    if(Board.board[r][c] != nullptr && Board.board[r][c]->isWhitePiece() == isWhite){
         return false;
     }
     
-    if(board[r][c] == nullptr){
+    if(Board.board[r][c] == nullptr){
         return true;
     }
     return false;
 }
     return false;
+
 }
+/*
+Check Rook Move Valid
+*/
+bool CheckRookMoveValid(int r1,int c1,int r2,int c2, ChessBoard& Board,bool iswhite){
+    if(r1 == r2){
+        for(int i = c1 + 1; i < c2; i++){
+            if(Board.board[r1][i] != nullptr){
+                return false;
+            }
+        }
+        if(Board.board[r2][c2] != nullptr && Board.board[r2][c2]->isWhitePiece() == iswhite){
+            return false;
+        }
+        return true;
+    }
+    if(c1 == c2){
+        for(int i = r1 + 1; i < r2; i++){
+            if(Board.board[i][c1] != nullptr){
+                return false;
+            }
+        }
+        if(Board.board[r2][c2] != nullptr && Board.board[r2][c2]->isWhitePiece() == iswhite){
+            return false;
+        }
+        return true;
+    }
+    return false;
+}
+
+/*
+check function
+*/
+bool ChessBoard::check(int r2,int c2, bool isWhite,PieceType type,int r1, int c1,bool forAkilling){
+   switch (type) {
+   case PieceType::PAWN:
+    if(CheckPawnMoveValid(r2, c2, *this, isWhite,forAkilling)){
+        return true;
+    }
+   break;
+   case PieceType::ROOK:
+   if(CheckRookMoveValid(r1, c1,r2,c2,*this,isWhite)){
+       return true;
+   }
+   case PieceType::BISHOP:
+   case PieceType::KNIGHT:
+   case PieceType::QUEEN:
+   case PieceType::KING:
+    default:
+        break;
+   }
+   return false;
+}
+

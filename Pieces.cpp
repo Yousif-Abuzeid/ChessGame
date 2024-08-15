@@ -25,7 +25,7 @@
     Methods For Piece Class
     */
     //constructor for piece class
-    Piece::Piece(int r, int c, bool isWhite ,bool isPawn=false) : pos(r, c), isWhite(isWhite), isAlive(true),pawn((isPawn)) {}
+    Piece::Piece(int r, int c, bool isWhite ,PieceType type) : pos(r, c), isWhite(isWhite), isAlive(true),type(type) {}
 
     bool Piece:: Alive() const{
         return isAlive;
@@ -36,14 +36,15 @@
     bool Piece::isWhitePiece() const {
         return isWhite;
     }
-    bool Piece::isPawn() const {
-        return pawn;
+    PieceType Piece::GetType(){
+        return type;
     }
+    
     /*
     Methods For Pawn Class
     */
     //constructor for pawn class
-    Pawn::Pawn(int r, int c, bool isWhite) : Piece(r, c, isWhite,true),FirstMove(true) {}
+    Pawn::Pawn(int r, int c, bool isWhite) : Piece(r, c, isWhite,PieceType::PAWN),FirstMove(true) {}
     bool Pawn::move(int r, int c,ChessBoard & board) {
     // Check if the move is within the board and valid for the pawn's color
     // if (!board.check(r, c, isWhite,true)) {
@@ -57,7 +58,7 @@
     // First move can be two squares forward
     if (FirstMove && c == currentCol && abs(r - currentRow) == 2) {
          // Ensure no piece is blocking the move
-        if(board.check(r, c, !isWhite)){
+        if(board.check(r, c, !isWhite,GetType())){
             pos.changePosition(r, c);
             FirstMove = false;
             return true;
@@ -66,7 +67,7 @@
 
     // Normal move: one square forward
     if (c == currentCol && r == currentRow + (isWhite ? 1 : -1)) {
-            if(board.check(r, c, !isWhite)){
+            if(board.check(r, c, !isWhite,GetType())){
                 pos.changePosition(r, c);
                 return true;
             }
@@ -75,9 +76,9 @@
     
 
     // Capture move: one square diagonally forward
-    if ((abs(c - currentCol) == 1 && r == currentRow + (isWhite ? 1 : -1))&& board.check(r, c, isWhite ,true)) {
+    if ((abs(c - currentCol) == 1 && r == currentRow + (isWhite ? 1 : -1))&& board.check(r, c, isWhite ,GetType(),true)) {
         // Ensure there's an opponent piece to capture
-        if(board.check(r, c, isWhite, true)){   
+        if(board.check(r, c, isWhite,GetType(),true)){   
             pos.changePosition(r, c);
 
             std::cout << "You Killed a Piece At (" << r << "," << c << ")" << std::endl;
@@ -102,11 +103,19 @@
     Methods For Rook Class
     */
     // constructor
-    Rook::Rook(int r, int c, bool isWhite) : Piece(r, c, isWhite) {}
+    Rook::Rook(int r, int c, bool isWhite) : Piece(r, c, isWhite,PieceType::ROOK) {}
     bool Rook:: move(int r, int c,ChessBoard & board){
         /*
         Rook's Movement Logic
         */
+        int currentRow=pos.getRow();
+        int currentCol=pos.getCol();
+        if(currentCol==c || currentRow == r){
+            if(board.check(r,c, isWhite,GetType(),currentRow,currentCol)){
+                pos.changePosition(r,c);
+                return true;
+            }
+        }
         return false; 
         
     }
@@ -119,7 +128,7 @@
     Methods For Knight Class
     */
     //constructor
-    Knight::Knight(int r, int c, bool isWhite) : Piece(r, c, isWhite) {}
+    Knight::Knight(int r, int c, bool isWhite) : Piece(r, c, isWhite,PieceType::KNIGHT) {}
     bool Knight::move(int r, int c,ChessBoard & board) {
         /*
         Knight's Movement Logic
@@ -134,7 +143,7 @@
     Methods For Bishop Class
     */
     //constructor
-    Bishop::Bishop(int r, int c, bool isWhite) : Piece(r, c, isWhite) {}
+    Bishop::Bishop(int r, int c, bool isWhite) : Piece(r, c, isWhite,PieceType::BISHOP) {}
     bool Bishop:: move(int r, int c,ChessBoard & board) {
         /*
         Bishop's Movement Logic
@@ -148,7 +157,7 @@
     /*
     Methods For Queen Class
     */
-    Queen::Queen(int r, int c, bool isWhite) : Piece(r, c, isWhite) {}
+    Queen::Queen(int r, int c, bool isWhite) : Piece(r, c, isWhite,PieceType::QUEEN) {}
     bool Queen:: move(int r, int c,ChessBoard & board) {
         /*
         Queen's Movement Logic
@@ -161,7 +170,7 @@
     /*
     Methods For King Class
     */
-    King::King(int r, int c, bool isWhite) : Piece(r, c, isWhite), isCheck(false) {}
+    King::King(int r, int c, bool isWhite) : Piece(r, c, isWhite,PieceType::KING), isCheck(false) {}
     bool King::move(int r, int c,ChessBoard & board) {
         /*
         King's Movement Logic

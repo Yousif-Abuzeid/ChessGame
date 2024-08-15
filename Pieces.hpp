@@ -1,10 +1,14 @@
 #ifndef PIECES_HPP
 #define PIECES_HPP 
 class ChessBoard; // Forward declaration
+
+enum class PieceType { PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING };
 class Position {
 private:
     int row;
     int col;
+    
+    
 public:
     Position(int r , int c);
     int getRow() const ;
@@ -18,16 +22,17 @@ protected:
     Position pos;
     bool isWhite;
     bool isAlive;
-    bool pawn;
+    PieceType type;
+
 public:
-    Piece(int r, int c, bool isWhite,bool isPawn); ;
+    Piece(int r, int c, bool isWhite,PieceType); 
     virtual ~Piece() {} // Virtual destructor for proper cleanup
     virtual bool move(int r, int c,ChessBoard & board) = 0;
     virtual void display() const = 0;
     bool isWhitePiece() const;
     bool Alive() const;
     void setAlive(bool alive);
-    bool isPawn() const;
+    PieceType GetType();
 };
 
 
