@@ -76,9 +76,9 @@
     
 
     // Capture move: one square diagonally forward
-    if ((abs(c - currentCol) == 1 && r == currentRow + (isWhite ? 1 : -1))&& board.check(r, c, isWhite ,GetType(),true)) {
+    if ((abs(c - currentCol) == 1 && r == currentRow + (isWhite ? 1 : -1))&& board.check(r, c, isWhite ,GetType(),currentRow,currentCol,true)) {
         // Ensure there's an opponent piece to capture
-        if(board.check(r, c, isWhite,GetType(),true)){   
+        if(board.check(r, c, isWhite,GetType(),currentRow,currentCol,true)){   
             pos.changePosition(r, c);
 
             std::cout << "You Killed a Piece At (" << r << "," << c << ")" << std::endl;
@@ -133,6 +133,9 @@
         /*
         Knight's Movement Logic
         */
+        int currentRow=pos.getRow();
+        int currentCol=pos.getCol();
+    
         return false;
     }
     void Knight::display() const{
