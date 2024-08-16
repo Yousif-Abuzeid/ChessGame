@@ -1,6 +1,7 @@
 #include "Pieces.hpp"
 #include <iostream>
 #include <cmath> // For std::abs
+#include <vector>
 #include "ChessBoard.hpp"
 
    
@@ -25,14 +26,9 @@
     Methods For Piece Class
     */
     //constructor for piece class
-    Piece::Piece(int r, int c, bool isWhite ,PieceType type) : pos(r, c), isWhite(isWhite), isAlive(true),type(type) {}
+    Piece::Piece(int r, int c, bool isWhite ,PieceType type) : pos(r, c), isWhite(isWhite),type(type) {}
 
-    bool Piece:: Alive() const{
-        return isAlive;
-    }
-    void Piece::setAlive(bool alive){
-        isAlive=alive;
-    }
+   
     bool Piece::isWhitePiece() const {
         return isWhite;
     }
@@ -96,7 +92,34 @@
         std::cout << (isWhite ? "P" : "p");
     }
     void Pawn::promotion(){
-        /*code*/
+        
+
+    }
+    std::vector<Position> Pawn::getValidMoves(ChessBoard & board){
+        std::vector<Position> validMoves;
+        int currentRow = pos.getRow();
+        int currentCol = pos.getCol();
+        int forward = isWhite ? 1 : -1;
+
+        // Check if the square in front of the pawn is empty
+        if (board.check(currentRow + forward, currentCol, isWhite,GetType())) {
+            validMoves.push_back(Position(currentRow + forward, currentCol));
+        }
+
+        // Check if the square two squares in front of the pawn is empty
+        if (FirstMove && board.check(currentRow + 2 * forward, currentCol, isWhite,GetType())) {
+            validMoves.push_back(Position(currentRow + 2 * forward, currentCol));
+        }
+
+        // Check if the pawn can capture an opponent piece
+        if (board.check(currentRow + forward, currentCol + 1, isWhite,GetType())) {
+            validMoves.push_back(Position(currentRow + forward, currentCol + 1));
+        }
+        if (board.check(currentRow + forward, currentCol - 1, isWhite,GetType())) {
+            validMoves.push_back(Position(currentRow + forward, currentCol - 1));
+        }
+
+        return validMoves;
     }
 
     /*
@@ -123,6 +146,10 @@
         std::cout << (isWhite ? "R" : "r");
     }
 
+    std::vector<Position> Rook::getValidMoves(ChessBoard&board){
+
+    }
+
 
     /*
     Methods For Knight Class
@@ -135,6 +162,13 @@
         */
         int currentRow=pos.getRow();
         int currentCol=pos.getCol();
+        
+        if((abs(currentRow-r)==2 && abs(currentCol-c)==1) || (abs(currentRow-r)==1 && abs(currentCol-c)==2)){
+            if(board.check(r,c, isWhite,GetType(),currentRow,currentCol)){
+                pos.changePosition(r,c);
+                return true;
+            }
+        }
     
         return false;
     }
@@ -142,6 +176,9 @@
         std::cout << (isWhite ? "N" : "n");
     };
 
+    std::vector<Position> Knight::getValidMoves(ChessBoard&board){
+
+    }
     /*
     Methods For Bishop Class
     */
@@ -151,11 +188,23 @@
         /*
         Bishop's Movement Logic
         */
+        int currentRow=pos.getRow();
+        int currentCol=pos.getCol();
+
+        if(abs(currentRow-r)==abs(currentCol-c)){
+            if(board.check(r,c, isWhite,GetType(),currentRow,currentCol)){
+                pos.changePosition(r,c);
+                return true;
+            }
+        }
         return false;
     }
     void Bishop::display() const {
         std::cout << (isWhite ? "B" : "b");
-    } ;
+    } 
+    std::vector<Position> Bishop::getValidMoves(ChessBoard&board){
+
+    }
 
     /*
     Methods For Queen Class
@@ -165,10 +214,33 @@
         /*
         Queen's Movement Logic
         */
+        int currentRow=pos.getRow();
+        int currentCol=pos.getCol();
+        /*
+        for rook movement
+        */
+        if(currentCol==c || currentRow == r){
+            if(board.check(r,c, isWhite,GetType(),currentRow,currentCol)){
+                pos.changePosition(r,c);
+                return true;
+            }
+        }
+        /*
+        for bishop movement
+        */
+        if(abs(currentRow-r)==abs(currentCol-c)){
+            if(board.check(r,c, isWhite,GetType(),currentRow,currentCol)){
+                pos.changePosition(r,c);
+                return true;
+            }
+        }
         return false;
     }
     void Queen::display() const {
         std::cout << (isWhite ? "Q" : "q");
+    }
+    std::vector<Position> Queen::getValidMoves(ChessBoard&board){
+
     }
     /*
     Methods For King Class
@@ -194,4 +266,7 @@
     }
     void King::CheckKing(){
         isCheck=true;
+    }
+    std::vector<Position> King::getValidMoves(ChessBoard&board){
+
     }

@@ -17,9 +17,9 @@ public:
     void killPiece(int r, int c);
     friend bool CheckPawnMoveValid(int r,int c, ChessBoard& Board,bool iswhite,bool forAkilling);
     friend bool CheckRookMoveValid(int r1,int c1,int r2,int c2, ChessBoard& Board,bool iswhite);
-    friend bool CheckKnightMoveValid(int r,int c, ChessBoard& Board,bool iswhite);
-    friend bool CheckBishopMoveValid(int r,int c, ChessBoard& Board,bool iswhite);
-    friend bool CheckQueenMoveValid(int r,int c, ChessBoard& Board,bool iswhite);
+    friend bool CheckKnightMoveValid(int r1,int c1,int r2,int c2, ChessBoard& Board,bool iswhite);
+    friend bool CheckBoolMoveValid(int r1,int c1,int r2,int c2, ChessBoard& Board,bool iswhite);
+    friend bool CheckQueenMoveValid(int r1,int c1,int r2,int c2, ChessBoard& Board,bool iswhite);;
     friend bool CheckKingMoveValid(int r,int c, ChessBoard& Board,bool iswhite);
 
 

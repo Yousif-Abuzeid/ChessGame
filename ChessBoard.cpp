@@ -139,6 +139,48 @@ bool CheckRookMoveValid(int r1,int c1,int r2,int c2, ChessBoard& Board,bool iswh
     }
     return false;
 }
+/*
+Check Bishop Move Valid
+*/
+bool CheckBoolMoveValid(int r1,int c1,int r2,int c2, ChessBoard& Board,bool iswhite){
+    if(abs(r1 - r2) == abs(c1 - c2)){
+        int row = r1 < r2 ? r1 + 1 : r1 - 1;
+        int col = c1 < c2 ? c1 + 1 : c1 - 1;
+        while(row != r2 && col != c2){
+            if(Board.board[row][col] != nullptr){
+                return false;
+            }
+            row = r1 < r2 ? row + 1 : row - 1;
+            col = c1 < c2 ? col + 1 : col - 1;
+        }
+        if(Board.board[r2][c2] != nullptr && Board.board[r2][c2]->isWhitePiece() == iswhite){
+            return false;
+        }
+        return true;
+    }
+    return false;
+}
+/*
+Check Knight Move Valid
+*/
+bool CheckKnightMoveValid(int r1,int c1,int r2,int c2, ChessBoard& Board,bool iswhite){
+    if((abs(r1 - r2) == 2 && abs(c1 - c2) == 1) || (abs(r1 - r2) == 1 && abs(c1 - c2) == 2)){
+        if(Board.board[r2][c2] != nullptr && Board.board[r2][c2]->isWhitePiece() == iswhite){
+            return false;
+        }
+        return true;
+    }
+    return false;
+}
+/*
+Check Queen Move Valid
+*/
+bool CheckQueenMoveValid(int r1,int c1,int r2,int c2, ChessBoard& Board,bool iswhite){
+    if(CheckBoolMoveValid(r1, c1, r2, c2, Board, iswhite) || CheckRookMoveValid(r1, c1, r2, c2, Board, iswhite)){
+        return true;
+    }
+    return false;
+}
 
 /*
 check function
@@ -155,8 +197,17 @@ bool ChessBoard::check(int r2,int c2, bool isWhite,PieceType type,int r1, int c1
        return true;
    }
    case PieceType::BISHOP:
+   if(CheckBoolMoveValid(r1, c1,r2,c2,*this,isWhite)){
+       return true;
+   }
    case PieceType::KNIGHT:
+    if(CheckKnightMoveValid(r1, c1,r2,c2,*this,isWhite)){
+         return true;
+    }
    case PieceType::QUEEN:
+    if(CheckQueenMoveValid(r1, c1,r2,c2,*this,isWhite)){
+        return true;
+    }
    case PieceType::KING:
     default:
         break;
