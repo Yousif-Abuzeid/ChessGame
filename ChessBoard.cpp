@@ -1,6 +1,7 @@
 #include "ChessBoard.hpp"
 #include "Pieces.hpp"
 #include <iostream>
+#include <ostream>
 
 /*
 Constructor For the Board
@@ -61,6 +62,12 @@ void ChessBoard::display() const {
 /*
 Method to move the pieces
 */
+std::ostream& operator<<(std::ostream& os,const std::vector<Position> &pos){
+    for(int i = 0; i < pos.size(); i++){
+        os<<pos[i].getRow()<<" "<<pos[i].getCol()<<std::endl;
+    }
+    return os;
+}
 
 bool ChessBoard::move(int r1, int c1, int r2, int c2){
     if(r1 < 0 || r1 > 7 || c1 < 0 || c1 > 7 || r2 < 0 || r2 > 7 || c2 < 0 || c2 > 7){
@@ -77,6 +84,24 @@ bool ChessBoard::move(int r1, int c1, int r2, int c2){
         
         board[r2][c2] = board[r1][c1];
         board[r1][c1] = nullptr;
+        int newRow=0;
+        int newCol=0;
+        std::vector<Position> validMoves = board[r2][c2]->getValidMoves(*this);
+        std::cout<<validMoves<<std::endl;
+        for(int i = 0; i < validMoves.size(); i++){
+            newRow = validMoves[i].getRow();
+            newCol = validMoves[i].getCol();
+            //std::cout<<newRow<<" "<<newCol<<std::endl;
+            if(board[newRow][newCol] != nullptr && board[newRow][newCol]->GetType() == PieceType::KING){
+                std::cout<<"Check"<<std::endl;
+                King* king = dynamic_cast<King*>(board[newRow][newCol]);
+                if (king != nullptr) {
+                    // Do something with the king object
+                    king->CheckKing();
+                }
+            }
+        }
+
         return true;
     }
     std::cout<<"Invalid Move"<<std::endl;
@@ -95,17 +120,20 @@ Check Pawn Move Valid
 */
 bool CheckPawnMoveValid(int r,int c,ChessBoard& Board,bool isWhite,bool forAkilling=false){
     if(forAkilling){
+        
         if (Board.board[r][c] != nullptr && Board.board[r][c]->isWhitePiece() != isWhite){
             return true;
         }
     }else{
+    if(Board.board[r][c] == nullptr){
+        return true;
+    }
+
     if(Board.board[r][c] != nullptr && Board.board[r][c]->isWhitePiece() == isWhite){
         return false;
     }
     
-    if(Board.board[r][c] == nullptr){
-        return true;
-    }
+    
     return false;
 }
     return false;

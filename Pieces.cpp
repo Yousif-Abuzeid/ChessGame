@@ -112,13 +112,12 @@
         }
 
         // Check if the pawn can capture an opponent piece
-        if (board.check(currentRow + forward, currentCol + 1, isWhite,GetType())) {
+        if (board.check(currentRow + forward, currentCol + 1, isWhite,GetType(),currentRow,currentCol),true) {
             validMoves.push_back(Position(currentRow + forward, currentCol + 1));
         }
-        if (board.check(currentRow + forward, currentCol - 1, isWhite,GetType())) {
+        if (board.check(currentRow + forward, currentCol - 1, isWhite,GetType(),currentRow,currentCol),true) {
             validMoves.push_back(Position(currentRow + forward, currentCol - 1));
         }
-
         return validMoves;
     }
 
@@ -225,39 +224,39 @@
         int currentCol = pos.getCol();
 
         // Check for valid moves in the forward direction
-        if (board.check(currentRow + 2, currentCol + 1, isWhite,GetType())) {
+        if (board.check(currentRow + 2, currentCol + 1, isWhite,GetType(),currentRow,currentCol)) {
             validMoves.push_back(Position(currentRow + 2, currentCol + 1));
         }
-        if (board.check(currentRow + 2, currentCol - 1, isWhite,GetType())) {
+        if (board.check(currentRow + 2, currentCol - 1, isWhite,GetType(),currentRow,currentCol)) {
             validMoves.push_back(Position(currentRow + 2, currentCol - 1));
         }
 
         // Check for valid moves in the backward direction
-        if (board.check(currentRow - 2, currentCol + 1, isWhite,GetType())) {
+        if (board.check(currentRow - 2, currentCol + 1, isWhite,GetType(),currentRow,currentCol)) {
             validMoves.push_back(Position(currentRow - 2, currentCol + 1));
 
         }
-        if (board.check(currentRow - 2, currentCol - 1, isWhite,GetType())) {
+        if (board.check(currentRow - 2, currentCol - 1, isWhite,GetType(),currentRow,currentCol)) {
             validMoves.push_back(Position(currentRow - 2, currentCol - 1));
         }
 
         // Check for valid moves in the right direction
-        if (board.check(currentRow + 1, currentCol + 2, isWhite,GetType())) {
+        if (board.check(currentRow + 1, currentCol + 2, isWhite,GetType(),currentRow,currentCol)) {
             validMoves.push_back(Position(currentRow + 1, currentCol + 2));
         }
 
 
-        if (board.check(currentRow - 1, currentCol + 2, isWhite,GetType())) {
+        if (board.check(currentRow - 1, currentCol + 2, isWhite,GetType(),currentRow,currentCol)) {
             validMoves.push_back(Position(currentRow - 1, currentCol + 2));
         }
 
         // Check for valid moves in the left direction
 
-        if (board.check(currentRow + 1, currentCol - 2, isWhite,GetType())) {
+        if (board.check(currentRow + 1, currentCol - 2, isWhite,GetType(),currentRow,currentCol)) {
             validMoves.push_back(Position(currentRow + 1, currentCol - 2));
         }
 
-        if (board.check(currentRow - 1, currentCol - 2, isWhite,GetType())) {
+        if (board.check(currentRow - 1, currentCol - 2, isWhite,GetType(),currentRow,currentCol)) {
             validMoves.push_back(Position(currentRow - 1, currentCol - 2));
         }
 
@@ -293,7 +292,7 @@
 
         // Check for valid moves in the forward right direction
         for (int i = 1; currentRow + i < 8 && currentCol + i < 8; i++) {
-            if (board.check(currentRow + i, currentCol + i, isWhite,GetType())) {
+            if (board.check(currentRow + i, currentCol + i, isWhite,GetType(),currentRow,currentCol)) {
                 validMoves.push_back(Position(currentRow + i, currentCol + i));
             } else {
                 break;
@@ -303,7 +302,7 @@
         // Check for valid moves in the forward left direction
 
         for (int i = 1; currentRow + i < 8 && currentCol - i >= 0; i++) {
-            if (board.check(currentRow + i, currentCol - i, isWhite,GetType())) {
+            if (board.check(currentRow + i, currentCol - i, isWhite,GetType(),currentRow,currentCol)) {
                 validMoves.push_back(Position(currentRow + i, currentCol - i));
             } else {
                 break;
@@ -313,7 +312,7 @@
         // Check for valid moves in the backward right direction
 
         for (int i = 1; currentRow - i >= 0 && currentCol + i < 8; i++) {
-            if (board.check(currentRow - i, currentCol + i, isWhite,GetType())) {
+            if (board.check(currentRow - i, currentCol + i, isWhite,GetType(),currentRow,currentCol)) {
                 validMoves.push_back(Position(currentRow - i, currentCol + i));
             } else {
                 break;
@@ -323,7 +322,7 @@
         // Check for valid moves in the backward left direction
 
         for (int i = 1; currentRow - i >= 0 && currentCol - i >= 0; i++) {
-            if (board.check(currentRow - i, currentCol - i, isWhite,GetType())) {
+            if (board.check(currentRow - i, currentCol - i, isWhite,GetType(),currentRow,currentCol)) {
                 validMoves.push_back(Position(currentRow - i, currentCol - i));
             } else {
                 break;
@@ -372,81 +371,65 @@
 
         // Check for valid moves in the forward direction
         for (int i = currentRow + 1; i < 8; i++) {
-            if (board.check(i, currentCol, isWhite,GetType())) {
+            if (board.check(i, currentCol, isWhite,GetType(),currentRow,currentCol)) {
                 validMoves.push_back(Position(i, currentCol));
-            } else {
-                break;
-            }
+            } 
         }
 
         // Check for valid moves in the backward direction
 
         for (int i = currentRow - 1; i >= 0; i--) {
-            if (board.check(i, currentCol, isWhite,GetType())) {
+            if (board.check(i, currentCol, isWhite,GetType(),currentRow,currentCol)) {
                 validMoves.push_back(Position(i, currentCol));
-            } else {
-                break;
-            }
+            } 
         }
 
         // Check for valid moves in the right direction
 
         for (int i = currentCol + 1; i < 8; i++) {
-            if (board.check(currentRow, i, isWhite,GetType())) {
+            if (board.check(currentRow, i, isWhite,GetType(),currentRow,currentCol)) {
                 validMoves.push_back(Position(currentRow, i));
-            } else {
-                break;
-            }
+            } 
         }
 
         // Check for valid moves in the left direction
 
         for (int i = currentCol - 1; i >= 0; i--) {
-            if (board.check(currentRow, i, isWhite,GetType())) {
+            if (board.check(currentRow, i, isWhite,GetType(),currentRow,currentCol)) {
                 validMoves.push_back(Position(currentRow, i));
-            } else {
-                break;
-            }
+            } 
         }
 
         // Check for valid moves in the forward right direction
 
         for (int i = 1; currentRow + i < 8 && currentCol + i < 8; i++) {
-            if (board.check(currentRow + i, currentCol + i, isWhite,GetType())) {
+            if (board.check(currentRow + i, currentCol + i, isWhite,GetType(),currentRow,currentCol)) {
                 validMoves.push_back(Position(currentRow + i, currentCol + i));
-            } else {
-                break;
-            }
+            } 
         }
 
         // Check for valid moves in the forward left direction
 
         for (int i = 1; currentRow + i < 8 && currentCol - i >= 0; i++) {
-            if (board.check(currentRow + i, currentCol - i, isWhite,GetType())) {
+            if (board.check(currentRow + i, currentCol - i, isWhite,GetType(),currentRow,currentCol)) {
                 validMoves.push_back(Position(currentRow + i, currentCol - i));
-            } else {
-                break;
             }
         }
 
         // Check for valid moves in the backward right direction
 
         for (int i = 1; currentRow - i >= 0 && currentCol + i < 8; i++) {
-            if (board.check(currentRow - i, currentCol + i, isWhite,GetType())) {
+            if (board.check(currentRow - i, currentCol + i, isWhite,GetType(),currentRow,currentCol)) {
                 validMoves.push_back(Position(currentRow - i, currentCol + i));
-            } else {
-                break;
-            }
+            } 
         }
 
         // Check for valid moves in the backward left direction
 
         for (int i = 1; currentRow - i >= 0 && currentCol - i >= 0; i++) {
-            if (board.check(currentRow - i, currentCol - i, isWhite,GetType())) {
+            if (board.check(currentRow - i, currentCol - i, isWhite,GetType(),currentRow,currentCol)) {
                 validMoves.push_back(Position(currentRow - i, currentCol - i));
-            } else {
-                break;
-            }
+            } 
         }
 
         return validMoves;
@@ -486,6 +469,48 @@
         isCheck=true;
     }
     std::vector<Position> King::getValidMoves(ChessBoard&board){
+        std::vector<Position> validMoves;
+        int currentRow = pos.getRow();
+        int currentCol = pos.getCol();
 
+        // Check for valid moves in the forward direction
+        
+        if (board.check(currentRow + 1, currentCol, isWhite,GetType(),currentRow,currentCol)) {
+            validMoves.push_back(Position(currentRow + 1, currentCol));
+        }
+        if (board.check(currentRow + 1, currentCol + 1, isWhite,GetType(),currentRow,currentCol)) {
+            validMoves.push_back(Position(currentRow + 1, currentCol + 1));
+        }
+        if (board.check(currentRow + 1, currentCol - 1, isWhite,GetType(),currentRow,currentCol)) {
+            validMoves.push_back(Position(currentRow + 1, currentCol - 1));
+        }
+
+        // Check for valid moves in the backward direction
+
+        if (board.check(currentRow - 1, currentCol, isWhite,GetType(),currentRow,currentCol)) {
+            validMoves.push_back(Position(currentRow - 1, currentCol));
+        }
+        if (board.check(currentRow - 1, currentCol + 1, isWhite,GetType(),currentRow,currentCol)) {
+            validMoves.push_back(Position(currentRow - 1, currentCol + 1));
+        }
+        if (board.check(currentRow - 1, currentCol - 1, isWhite,GetType(),currentRow,currentCol)) {
+            validMoves.push_back(Position(currentRow - 1, currentCol - 1));
+        }
+        
+        // Check for valid moves in the right direction
+
+        if (board.check(currentRow, currentCol + 1, isWhite,GetType(),currentRow,currentCol)) {
+            validMoves.push_back(Position(currentRow, currentCol + 1));
+        }
+
+        // Check for valid moves in the left direction
+
+        if (board.check(currentRow, currentCol - 1, isWhite,GetType(),currentRow,currentCol)) {
+            validMoves.push_back(Position(currentRow, currentCol - 1));
+        }
+
+        return validMoves;
+
+        
 
     }   
