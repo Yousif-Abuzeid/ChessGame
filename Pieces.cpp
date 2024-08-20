@@ -147,7 +147,49 @@
     }
 
     std::vector<Position> Rook::getValidMoves(ChessBoard&board){
+        std::vector<Position> validMoves;
+        int currentRow = pos.getRow();
+        int currentCol = pos.getCol();
 
+        // Check for valid moves in the forward direction
+        for (int i = currentRow + 1; i < 8; i++) {
+            if (board.check(i, currentCol, isWhite,GetType())) {
+                validMoves.push_back(Position(i, currentCol));
+            } else {
+                break;
+            }
+        }
+
+        // Check for valid moves in the backward direction
+        for (int i = currentRow - 1; i >= 0; i--) {
+            if (board.check(i, currentCol, isWhite,GetType())) {
+                validMoves.push_back(Position(i, currentCol));
+            } else {
+                break;
+            }
+        }
+
+        // Check for valid moves in the right direction
+
+        for (int i = currentCol + 1; i < 8; i++) {
+            if (board.check(currentRow, i, isWhite,GetType())) {
+                validMoves.push_back(Position(currentRow, i));
+            } else {
+                break;
+            }
+        }
+
+        // Check for valid moves in the left direction
+
+        for (int i = currentCol - 1; i >= 0; i--) {
+            if (board.check(currentRow, i, isWhite,GetType())) {
+                validMoves.push_back(Position(currentRow, i));
+            } else {
+                break;
+            }
+        }
+
+        return validMoves;
     }
 
 
@@ -177,7 +219,49 @@
     };
 
     std::vector<Position> Knight::getValidMoves(ChessBoard&board){
+        std::vector<Position> validMoves;
 
+        int currentRow = pos.getRow();
+        int currentCol = pos.getCol();
+
+        // Check for valid moves in the forward direction
+        if (board.check(currentRow + 2, currentCol + 1, isWhite,GetType())) {
+            validMoves.push_back(Position(currentRow + 2, currentCol + 1));
+        }
+        if (board.check(currentRow + 2, currentCol - 1, isWhite,GetType())) {
+            validMoves.push_back(Position(currentRow + 2, currentCol - 1));
+        }
+
+        // Check for valid moves in the backward direction
+        if (board.check(currentRow - 2, currentCol + 1, isWhite,GetType())) {
+            validMoves.push_back(Position(currentRow - 2, currentCol + 1));
+
+        }
+        if (board.check(currentRow - 2, currentCol - 1, isWhite,GetType())) {
+            validMoves.push_back(Position(currentRow - 2, currentCol - 1));
+        }
+
+        // Check for valid moves in the right direction
+        if (board.check(currentRow + 1, currentCol + 2, isWhite,GetType())) {
+            validMoves.push_back(Position(currentRow + 1, currentCol + 2));
+        }
+
+
+        if (board.check(currentRow - 1, currentCol + 2, isWhite,GetType())) {
+            validMoves.push_back(Position(currentRow - 1, currentCol + 2));
+        }
+
+        // Check for valid moves in the left direction
+
+        if (board.check(currentRow + 1, currentCol - 2, isWhite,GetType())) {
+            validMoves.push_back(Position(currentRow + 1, currentCol - 2));
+        }
+
+        if (board.check(currentRow - 1, currentCol - 2, isWhite,GetType())) {
+            validMoves.push_back(Position(currentRow - 1, currentCol - 2));
+        }
+
+        return validMoves;
     }
     /*
     Methods For Bishop Class
@@ -203,9 +287,51 @@
         std::cout << (isWhite ? "B" : "b");
     } 
     std::vector<Position> Bishop::getValidMoves(ChessBoard&board){
+        std::vector<Position> validMoves;
+        int currentRow = pos.getRow();
+        int currentCol = pos.getCol();
 
+        // Check for valid moves in the forward right direction
+        for (int i = 1; currentRow + i < 8 && currentCol + i < 8; i++) {
+            if (board.check(currentRow + i, currentCol + i, isWhite,GetType())) {
+                validMoves.push_back(Position(currentRow + i, currentCol + i));
+            } else {
+                break;
+            }
+        }
+
+        // Check for valid moves in the forward left direction
+
+        for (int i = 1; currentRow + i < 8 && currentCol - i >= 0; i++) {
+            if (board.check(currentRow + i, currentCol - i, isWhite,GetType())) {
+                validMoves.push_back(Position(currentRow + i, currentCol - i));
+            } else {
+                break;
+            }
+        }
+
+        // Check for valid moves in the backward right direction
+
+        for (int i = 1; currentRow - i >= 0 && currentCol + i < 8; i++) {
+            if (board.check(currentRow - i, currentCol + i, isWhite,GetType())) {
+                validMoves.push_back(Position(currentRow - i, currentCol + i));
+            } else {
+                break;
+            }
+        }
+
+        // Check for valid moves in the backward left direction
+
+        for (int i = 1; currentRow - i >= 0 && currentCol - i >= 0; i++) {
+            if (board.check(currentRow - i, currentCol - i, isWhite,GetType())) {
+                validMoves.push_back(Position(currentRow - i, currentCol - i));
+            } else {
+                break;
+            }
+        }
+
+        return validMoves;
     }
-
     /*
     Methods For Queen Class
     */
@@ -240,7 +366,90 @@
         std::cout << (isWhite ? "Q" : "q");
     }
     std::vector<Position> Queen::getValidMoves(ChessBoard&board){
+        std::vector<Position> validMoves;
+        int currentRow = pos.getRow();
+        int currentCol = pos.getCol();
 
+        // Check for valid moves in the forward direction
+        for (int i = currentRow + 1; i < 8; i++) {
+            if (board.check(i, currentCol, isWhite,GetType())) {
+                validMoves.push_back(Position(i, currentCol));
+            } else {
+                break;
+            }
+        }
+
+        // Check for valid moves in the backward direction
+
+        for (int i = currentRow - 1; i >= 0; i--) {
+            if (board.check(i, currentCol, isWhite,GetType())) {
+                validMoves.push_back(Position(i, currentCol));
+            } else {
+                break;
+            }
+        }
+
+        // Check for valid moves in the right direction
+
+        for (int i = currentCol + 1; i < 8; i++) {
+            if (board.check(currentRow, i, isWhite,GetType())) {
+                validMoves.push_back(Position(currentRow, i));
+            } else {
+                break;
+            }
+        }
+
+        // Check for valid moves in the left direction
+
+        for (int i = currentCol - 1; i >= 0; i--) {
+            if (board.check(currentRow, i, isWhite,GetType())) {
+                validMoves.push_back(Position(currentRow, i));
+            } else {
+                break;
+            }
+        }
+
+        // Check for valid moves in the forward right direction
+
+        for (int i = 1; currentRow + i < 8 && currentCol + i < 8; i++) {
+            if (board.check(currentRow + i, currentCol + i, isWhite,GetType())) {
+                validMoves.push_back(Position(currentRow + i, currentCol + i));
+            } else {
+                break;
+            }
+        }
+
+        // Check for valid moves in the forward left direction
+
+        for (int i = 1; currentRow + i < 8 && currentCol - i >= 0; i++) {
+            if (board.check(currentRow + i, currentCol - i, isWhite,GetType())) {
+                validMoves.push_back(Position(currentRow + i, currentCol - i));
+            } else {
+                break;
+            }
+        }
+
+        // Check for valid moves in the backward right direction
+
+        for (int i = 1; currentRow - i >= 0 && currentCol + i < 8; i++) {
+            if (board.check(currentRow - i, currentCol + i, isWhite,GetType())) {
+                validMoves.push_back(Position(currentRow - i, currentCol + i));
+            } else {
+                break;
+            }
+        }
+
+        // Check for valid moves in the backward left direction
+
+        for (int i = 1; currentRow - i >= 0 && currentCol - i >= 0; i++) {
+            if (board.check(currentRow - i, currentCol - i, isWhite,GetType())) {
+                validMoves.push_back(Position(currentRow - i, currentCol - i));
+            } else {
+                break;
+            }
+        }
+
+        return validMoves;
     }
     /*
     Methods For King Class
@@ -250,6 +459,15 @@
         /*
         King's Movement Logic
         */
+        int currentRow=pos.getRow();
+        int currentCol=pos.getCol();
+
+        if(abs(currentRow-r)<=1 && abs(currentCol-c)<=1){
+            if(board.check(r,c, isWhite,GetType(),currentRow,currentCol)){
+                pos.changePosition(r,c);
+                return true;
+            }
+        }
         return false;
     }
     void King::display() const{
@@ -269,4 +487,5 @@
     }
     std::vector<Position> King::getValidMoves(ChessBoard&board){
 
-    }
+
+    }   
