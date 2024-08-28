@@ -10,6 +10,7 @@
     */
     //constructor for Position class
     Position::Position(int r , int c) : row(r), col(c) {}
+    
     int Position:: getRow() const { return row; }
 
     int Position::getCol() const { return col; }
@@ -456,10 +457,13 @@
     void King::display() const{
         std::cout << (isWhite ? "K" : "k");
     }
-    bool King::isCheckMate(){
-        /*
-        Logic
-        */
+    bool King::isCheckMate(ChessBoard&board){
+        if(isCheck){
+            std::vector<Position> validMoves = getValidMoves(board);
+            if(validMoves.size()==0){
+                return true;
+            }
+        }
         return false;
     }
     bool King::isChecked(){

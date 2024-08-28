@@ -1,6 +1,7 @@
 #include "ChessBoard.hpp"
 #include "Pieces.hpp"
 #include <iostream>
+#include <list>
 #include <ostream>
 
 /*
@@ -79,6 +80,8 @@ bool ChessBoard::move(int r1, int c1, int r2, int c2){
                 return false;
 
     }
+
+    
     // Use the move method from the piece class
     if(board[r1][c1]->move(r2, c2, *this)){
         
@@ -98,6 +101,13 @@ bool ChessBoard::move(int r1, int c1, int r2, int c2){
                 if (king != nullptr) {
                     // Do something with the king object
                     king->CheckKing();
+                }
+                if(king->isChecked()){
+                    if(king->isCheckMate(*this)){
+                        std::cout<<"CheckMate"<<std::endl;
+                        exit(0);
+
+                    }
                 }
             }
         }

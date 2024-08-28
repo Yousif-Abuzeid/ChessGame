@@ -90,7 +90,7 @@ public:
     bool move(int r, int c,ChessBoard & board) override;
     std::vector<Position> getValidMoves(ChessBoard & board) override;
     void display() const override ;
-    bool isCheckMate();
+    bool isCheckMate(ChessBoard&board);
     bool isChecked();
     void CheckKing();
 };
