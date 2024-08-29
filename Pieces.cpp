@@ -78,7 +78,6 @@
         if(board.check(r, c, isWhite,GetType(),currentRow,currentCol,true)){   
             pos.changePosition(r, c);
 
-            std::cout << "You Killed a Piece At (" << r << "," << c << ")" << std::endl;
             return true;
         }
         std::cout << "You Can't be in the same block with one of Your Pieces" << std::endl;
@@ -101,23 +100,45 @@
         int currentRow = pos.getRow();
         int currentCol = pos.getCol();
         int forward = isWhite ? 1 : -1;
+        int newCol ;
+        int newRow ;
 
         // Check if the square in front of the pawn is empty
-        if (board.check(currentRow + forward, currentCol, isWhite,GetType())) {
-            validMoves.push_back(Position(currentRow + forward, currentCol));
+        newCol = currentCol;
+        newRow = currentRow + forward;
+        if(newRow>=0 && newRow<8 && newCol>=0 && newCol<8){
+            if (board.check(newRow, newCol, isWhite,GetType())) {
+                validMoves.push_back(Position(newRow, newCol));
+            }
         }
 
         // Check if the square two squares in front of the pawn is empty
-        if (FirstMove && board.check(currentRow + 2 * forward, currentCol, isWhite,GetType())) {
-            validMoves.push_back(Position(currentRow + 2 * forward, currentCol));
+        newCol = currentCol;
+        newRow = currentRow + 2 * forward;
+        if(newRow>=0 && newRow<8 && newCol>=0 && newCol<8){
+            if (FirstMove && board.check(newRow, newCol, isWhite,GetType())) {
+                validMoves.push_back(Position(newRow, newCol));
+            }
         }
+        
 
         // Check if the pawn can capture an opponent piece
-        if (board.check(currentRow + forward, currentCol + 1, isWhite,GetType(),currentRow,currentCol),true) {
-            validMoves.push_back(Position(currentRow + forward, currentCol + 1));
+
+        newCol = currentCol + 1;
+        newRow = currentRow + forward;
+        if(newRow>=0 && newRow<8 && newCol>=0 && newCol<8){
+            if (board.check(newRow, newCol, isWhite,GetType(),currentRow,currentCol),true) {
+                validMoves.push_back(Position(newRow, newCol));
+            }
         }
-        if (board.check(currentRow + forward, currentCol - 1, isWhite,GetType(),currentRow,currentCol),true) {
-            validMoves.push_back(Position(currentRow + forward, currentCol - 1));
+        
+        newCol = currentCol - 1;
+        newRow = currentRow + forward;
+
+        if(newRow>=0 && newRow<8 && newCol>=0 && newCol<8){
+            if (board.check(newRow, newCol, isWhite,GetType(),currentRow,currentCol),true) {
+                validMoves.push_back(Position(newRow, newCol));
+            }
         }
         return validMoves;
     }
@@ -223,43 +244,79 @@
 
         int currentRow = pos.getRow();
         int currentCol = pos.getCol();
+        int newRow ;
+        int newCol ;
 
         // Check for valid moves in the forward direction
-        if (board.check(currentRow + 2, currentCol + 1, isWhite,GetType(),currentRow,currentCol)) {
-            validMoves.push_back(Position(currentRow + 2, currentCol + 1));
-        }
-        if (board.check(currentRow + 2, currentCol - 1, isWhite,GetType(),currentRow,currentCol)) {
-            validMoves.push_back(Position(currentRow + 2, currentCol - 1));
-        }
+        newCol = currentCol + 1;
+        newRow = currentRow + 2;
 
+        if(newRow>=0 && newRow<8 && newCol>=0 && newCol<8){
+            if (board.check(newRow, newCol, isWhite,GetType(),currentRow,currentCol)) {
+                validMoves.push_back(Position(newRow, newCol));
+            }
+        }
+        newCol = currentCol - 1;
+        newRow = currentRow + 2;
+        if(newRow>=0 && newRow<8 && newCol>=0 && newCol<8){
+            if (board.check(newRow, newCol, isWhite,GetType(),currentRow,currentCol)) {
+                validMoves.push_back(Position(newRow, newCol));
+            }
+        }
         // Check for valid moves in the backward direction
-        if (board.check(currentRow - 2, currentCol + 1, isWhite,GetType(),currentRow,currentCol)) {
-            validMoves.push_back(Position(currentRow - 2, currentCol + 1));
-
+        newCol = currentCol + 1;
+        newRow = currentRow - 2;
+        if(newRow>=0 && newRow<8 && newCol>=0 && newCol<8){
+            if (board.check(newRow, newCol, isWhite,GetType(),currentRow,currentCol)) {
+                validMoves.push_back(Position(newRow, newCol));
+            }
         }
-        if (board.check(currentRow - 2, currentCol - 1, isWhite,GetType(),currentRow,currentCol)) {
-            validMoves.push_back(Position(currentRow - 2, currentCol - 1));
+        newCol = currentCol - 1;
+        newRow = currentRow - 2;
+        if(newRow>=0 && newRow<8 && newCol>=0 && newCol<8){
+            if (board.check(newRow, newCol, isWhite,GetType(),currentRow,currentCol)) {
+                validMoves.push_back(Position(newRow, newCol));
+            }
         }
+        
 
         // Check for valid moves in the right direction
-        if (board.check(currentRow + 1, currentCol + 2, isWhite,GetType(),currentRow,currentCol)) {
-            validMoves.push_back(Position(currentRow + 1, currentCol + 2));
+        newCol = currentCol + 2;
+        newRow = currentRow + 1;
+        if(newRow>=0 && newRow<8 && newCol>=0 && newCol<8){
+            if (board.check(newRow, newCol, isWhite,GetType(),currentRow,currentCol)) {
+                validMoves.push_back(Position(newRow, newCol));
+            }
         }
+        
 
-
-        if (board.check(currentRow - 1, currentCol + 2, isWhite,GetType(),currentRow,currentCol)) {
-            validMoves.push_back(Position(currentRow - 1, currentCol + 2));
+        newCol = currentCol + 2;
+        newRow = currentRow - 1;
+        if(newRow>=0 && newRow<8 && newCol>=0 && newCol<8){
+            if (board.check(newRow, newCol, isWhite,GetType(),currentRow,currentCol)) {
+                validMoves.push_back(Position(newRow, newCol));
+            }
         }
+        
 
         // Check for valid moves in the left direction
 
-        if (board.check(currentRow + 1, currentCol - 2, isWhite,GetType(),currentRow,currentCol)) {
-            validMoves.push_back(Position(currentRow + 1, currentCol - 2));
+        newCol = currentCol - 2;
+        newRow = currentRow + 1;
+        if(newRow>=0 && newRow<8 && newCol>=0 && newCol<8){
+            if (board.check(newRow, newCol, isWhite,GetType(),currentRow,currentCol)) {
+                validMoves.push_back(Position(newRow, newCol));
+            }
         }
-
-        if (board.check(currentRow - 1, currentCol - 2, isWhite,GetType(),currentRow,currentCol)) {
-            validMoves.push_back(Position(currentRow - 1, currentCol - 2));
+        
+        newCol = currentCol - 2;
+        newRow = currentRow - 1;
+        if(newRow>=0 && newRow<8 && newCol>=0 && newCol<8){
+            if (board.check(newRow, newCol, isWhite,GetType(),currentRow,currentCol)) {
+                validMoves.push_back(Position(newRow, newCol));
+            }
         }
+        
 
         return validMoves;
     }
@@ -438,7 +495,7 @@
     /*
     Methods For King Class
     */
-    King::King(int r, int c, bool isWhite) : Piece(r, c, isWhite,PieceType::KING), isCheck(false) {}
+    King::King(int r, int c, bool isWhite) : Piece(r, c, isWhite,PieceType::KING), isCheck(false),CheckingPiece(0, 0) {}
     bool King::move(int r, int c,ChessBoard & board) {
         /*
         King's Movement Logic
@@ -469,8 +526,9 @@
     bool King::isChecked(){
         return isCheck;
     }
-    void King::CheckKing(){
+    void King::CheckKing(Position p){
         isCheck=true;
+        CheckingPiece=p;
     }
     std::vector<Position> King::getValidMoves(ChessBoard&board){
         std::vector<Position> validMoves;

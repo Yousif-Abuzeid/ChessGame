@@ -73,40 +73,46 @@ std::ostream& operator<<(std::ostream& os,const std::vector<Position> &pos){
 bool ChessBoard::move(int r1, int c1, int r2, int c2){
     if(r1 < 0 || r1 > 7 || c1 < 0 || c1 > 7 || r2 < 0 || r2 > 7 || c2 < 0 || c2 > 7){
         return false;
-        std::cout<<"Invalid Move5"<<std::endl;
     }
     if(board[r1][c1] == nullptr){
-        std::cout<<"Invalid Move3"<<std::endl;
+       
                 return false;
 
+    }
+    
+    if(board[r2][c2]!=nullptr &&board[r2][c2]->GetType()==PieceType::KING){
+        std::cout<<"YOU CANNOT KILL THE KING"<<std::endl;
+        return false;
     }
 
     
     // Use the move method from the piece class
     if(board[r1][c1]->move(r2, c2, *this)){
         
-        board[r2][c2] = board[r1][c1];
+        board[r2][c2] = std::move(board[r1][c1]);
         board[r1][c1] = nullptr;
         int newRow=0;
         int newCol=0;
         std::vector<Position> validMoves = board[r2][c2]->getValidMoves(*this);
-        std::cout<<validMoves<<std::endl;
         for(int i = 0; i < validMoves.size(); i++){
             newRow = validMoves[i].getRow();
             newCol = validMoves[i].getCol();
             //std::cout<<newRow<<" "<<newCol<<std::endl;
             if(board[newRow][newCol] != nullptr && board[newRow][newCol]->GetType() == PieceType::KING){
-                std::cout<<"Check"<<std::endl;
+                //std::cout<<"Check"<<std::endl;
                 King* king = dynamic_cast<King*>(board[newRow][newCol]);
                 if (king != nullptr) {
                     // Do something with the king object
-                    king->CheckKing();
+                    king->CheckKing(Position(r2,c2));
                 }
                 if(king->isChecked()){
+                    if(CanBeKilled(r2, c2, board[r2][c2]->isWhitePiece())){
+                        std::cout<<"Check"<<std::endl;
+                    }else{
                     if(king->isCheckMate(*this)){
                         std::cout<<"CheckMate"<<std::endl;
                         exit(0);
-
+                    }
                     }
                 }
             }
@@ -251,5 +257,26 @@ bool ChessBoard::check(int r2,int c2, bool isWhite,PieceType type,int r1, int c1
         break;
    }
    return false;
+}
+
+/*  
+Check if the
+*/
+
+
+bool ChessBoard::CanBeKilled(int r, int c,bool isWhite){
+    for(int i = 0; i < 8; i++){
+        for(int j = 0; j < 8; j++){
+            if(board[i][j] != nullptr && board[i][j]->isWhitePiece() != isWhite){
+                std::vector<Position> validMoves = board[i][j]->getValidMoves(*this);
+                for(int k = 0; k < validMoves.size(); k++){
+                    if(validMoves[k].getRow() == r && validMoves[k].getCol() == c){
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+    return false;
 }
 

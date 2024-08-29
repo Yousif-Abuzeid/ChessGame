@@ -85,6 +85,7 @@ public:
 class King : public Piece {
 private:
     bool isCheck;
+    Position CheckingPiece;
 public:
     King(int r, int c, bool isWhite);
     bool move(int r, int c,ChessBoard & board) override;
@@ -92,7 +93,7 @@ public:
     void display() const override ;
     bool isCheckMate(ChessBoard&board);
     bool isChecked();
-    void CheckKing();
+    void CheckKing(Position p);
 };
 
 

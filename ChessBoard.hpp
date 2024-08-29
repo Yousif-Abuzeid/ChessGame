@@ -15,6 +15,7 @@ public:
     bool check(int r2, int c2, bool isWhite,PieceType type,int r1=-1,int c1=-1,bool forAkilling=false);
     bool checkMate(bool isWhite);
     void killPiece(int r, int c);
+    bool CanBeKilled(int r, int c,bool isWhite);
     friend bool CheckPawnMoveValid(int r,int c, ChessBoard& Board,bool iswhite,bool forAkilling);
     friend bool CheckRookMoveValid(int r1,int c1,int r2,int c2, ChessBoard& Board,bool iswhite);
     friend bool CheckKnightMoveValid(int r1,int c1,int r2,int c2, ChessBoard& Board,bool iswhite);
