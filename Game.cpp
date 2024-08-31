@@ -1,9 +1,12 @@
 #include "ChessBoard.hpp"
+#include <cstdlib>
 #include <string>
 #include <iostream>
 
+
 int main(){
     ChessBoard board;
+    std::system("clear");
     board.display();
     int counter =0;
     // Play the game
@@ -27,6 +30,7 @@ int main(){
         int r2 = move[3] - '1';
         int c2 = move[2] - 'A';
         board.move(r1, c1, r2, c2);
+        std::system("clear");
         board.display();
         
     } while (true);
