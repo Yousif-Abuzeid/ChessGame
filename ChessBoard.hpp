@@ -11,7 +11,7 @@ public:
     
     void display() const ;
     
-    bool move(int r1, int c1, int r2, int c2);
+    bool move(int r1, int c1, int r2, int c2,bool isWhite);
     bool check(int r2, int c2, bool isWhite,PieceType type,int r1=-1,int c1=-1,bool forAkilling=false);
     bool checkMate(bool isWhite);
     void killPiece(int r, int c);

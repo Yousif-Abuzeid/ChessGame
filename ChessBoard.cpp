@@ -1,7 +1,6 @@
 #include "ChessBoard.hpp"
 #include "Pieces.hpp"
 #include <iostream>
-#include <list>
 #include <ostream>
 
 /*
@@ -70,7 +69,17 @@ std::ostream& operator<<(std::ostream& os,const std::vector<Position> &pos){
     return os;
 }
 
-bool ChessBoard::move(int r1, int c1, int r2, int c2){
+bool ChessBoard::move(int r1, int c1, int r2, int c2,bool isWhite){
+    if(board[r1][c1] ->isWhitePiece() != isWhite){
+        if(isWhite){
+                std::cout<<"It is not your turn it's White's"<<std::endl;
+
+        }else{
+                std::cout<<"It is not your turn it's Black's"<<std::endl;
+
+        }
+        return false;
+    }
     if(r1 < 0 || r1 > 7 || c1 < 0 || c1 > 7 || r2 < 0 || r2 > 7 || c2 < 0 || c2 > 7){
         return false;
     }
