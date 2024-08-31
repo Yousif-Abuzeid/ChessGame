@@ -19,13 +19,13 @@ g++ main.cpp ChessBoard.cpp Piece.cpp App.cpp -o chessgame && ./chessgame
 
 ### Example
 
-![Example](Board.png)
+![Example](images/Board.png)
 
 ```bash
 E2E4
 
 ```
-![Example](Board2.png)
+![Example](images/Board2.png)
 
 
 ### Continue until someone gets checkmated or the game ends in a draw
