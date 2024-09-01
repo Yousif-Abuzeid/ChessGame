@@ -8,7 +8,7 @@ simple chess game made using c++
 
 ```bash
 
-g++ main.cpp ChessBoard.cpp Piece.cpp App.cpp -o chessgame && ./chessgame
+g++ main.cpp src/ChessBoard.cpp src/Piece.cpp src/App.cpp -o chessgame && ./chessgame
 
 ```
 
