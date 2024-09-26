@@ -4,214 +4,187 @@
 #include <iostream>
 #include <functional>
 
-    /*
-    * ------------------------------------------------------------------------------------------------
-    *   Pawn Class
-    * ------------------------------------------------------------------------------------------------
-    *
-    *
-    */
-    /*
-     *   Constructor
-     *  Input: r:start row
-     *         c: start column
-     *         isWhite: Piece Color
-     *            
-    */
-    Pawn::Pawn(int r, int c, bool isWhite) : Piece(r, c, isWhite,PieceType::PAWN),FirstMove(true) {}
-    
-    /*
-    *
-    * Name:   move Method
-    * Description:  Method to move the pawn
-    * Input: r:new row
-    *        c:new column
-    *        board: to get access to board and know other pieces positions
-    *
-    * Output: if the move is valid return true else false
-    *
-    *
-   */
-    bool Pawn::move(int r, int c, ChessBoard & board) {
-    
-    /*
-        Get the current row and column
-     */
+/*
+* ------------------------------------------------------------------------------------------------
+*   Pawn Class
+* ------------------------------------------------------------------------------------------------
+*
+*   This class handles the behavior of the Pawn piece in the chess game. It includes methods for
+*   moving, checking valid moves, and displaying the piece on the board.
+*/
+
+/*
+ *   Constructor for Pawn
+ *   Initializes a Pawn object with its starting row, column, and color.
+ *  Input: r - the starting row of the pawn
+ *         c - the starting column of the pawn
+ *         isWhite - a boolean value representing whether the pawn is white (true) or black (false)
+ *            
+*/
+Pawn::Pawn(int r, int c, bool isWhite) : Piece(r, c, isWhite, PieceType::PAWN), FirstMove(true) {}
+
+/*
+*   move Method
+*   This method handles the movement of the pawn on the chessboard.
+*   It checks if the move is valid according to the rules for pawn movement,
+*   which includes moving forward one or two squares and capturing diagonally.
+* 
+* Input: r - the new row to move to
+*        c - the new column to move to
+*        board - a reference to the chessboard object, used to check other pieces' positions
+*
+* Output: Returns true if the move is valid and successfully made; otherwise, returns false.
+*/
+bool Pawn::move(int r, int c, ChessBoard & board) {
+
+    // Get the current row and column of the pawn.
     int currentRow = pos.getRow();
     int currentCol = pos.getCol();
 
     /*
-        Bind check method from board with common parameters 
-        except for row and column which will vary for each move
-     */
+        Bind the `check` method from the ChessBoard class using `std::bind`.
+        This creates a new callable function `enemyCheck` that automatically includes
+        common parameters like `isWhite`, `GetType()`, `currentRow`, and `currentCol`.
+        We only need to specify the row and column when calling `enemyCheck`.
+    */
     auto enemyCheck = std::bind(&ChessBoard::check, &board, std::placeholders::_1, std::placeholders::_2, isWhite, GetType(), currentRow, currentCol, true);
 
     /*
-        Check if it's the first move 
-        if true, it's possible to move 2 forward blocks
+        First Move Logic:
+        If this is the pawn's first move and it's trying to move two squares forward,
+        we check if the path is clear (no pieces blocking the way).
     */
     if (FirstMove && c == currentCol && abs(r - currentRow) == 2) {
-         /*
-            Call check method from board to check if there is a piece blocking the way
-         */
+        // If the path is clear (no blocking piece), update the position and mark FirstMove as false.
         if (board.check(r, c, !isWhite, GetType())) {
-            // Change the positions
-            pos.changePosition(r, c);
-            FirstMove = false;
-            return true;
+            pos.changePosition(r, c);  // Update the pawn's position to the new coordinates
+            FirstMove = false;  // Mark that the pawn has made its first move
+            return true;  // Move is successful
         }
     }
 
     /*
-        Normal one forward block move
+        Normal Forward Move:
+        If the pawn is moving one square forward (which is the usual move),
+        we again check that there are no pieces blocking the path.
     */
     if (c == currentCol && r == currentRow + (isWhite ? 1 : -1)) {
-            /*
-                Call check method from board to check if there is a piece blocking the way
-            */
-            if (board.check(r, c, !isWhite, GetType())) {
-                pos.changePosition(r, c);
-                // Set FirstMove to false after the first move
-                FirstMove = false;
-                return true;
-            }
-    }
-
-    /*
-        Capture Move
-    */
-    if (abs(c - currentCol) == 1 && r == currentRow + (isWhite ? 1 : -1)) {
-        /*
-            Call boundCheck method from board to ensure there is an opponent piece in that position
-        */
-        if (enemyCheck(r, c)) {
-            pos.changePosition(r, c);
-            return true;
+        // If no pieces are blocking, update the position and mark FirstMove as false.
+        if (board.check(r, c, !isWhite, GetType())) {
+            pos.changePosition(r, c);  // Update the position to the new row and column
+            FirstMove = false;  // First move is now done
+            return true;  // Move is valid
         }
     }
 
     /*
-        There is no valid move, return false
+        Capture Move:
+        If the pawn is attempting a diagonal move (to capture an opponent's piece),
+        we use the `enemyCheck` function to ensure there's an opponent piece in the target position.
     */
+    if (abs(c - currentCol) == 1 && r == currentRow + (isWhite ? 1 : -1)) {
+        // If there is an opponent's piece to capture, update the position.
+        if (enemyCheck(r, c)) {
+            pos.changePosition(r, c);  // Update the pawn's position after capture
+            return true;  // Capture move is valid
+        }
+    }
+
+    // If no valid move was found, return false.
     return false;
 }
 
-    /*
-        Method to display pawn shape
-    */
-    void Pawn::display() const  {
-        std::cout << (isWhite ? "P" : "p");
-    }
+/*
+    display Method
+    This method prints the shape of the pawn to the console.
+    It displays 'P' for a white pawn and 'p' for a black pawn.
+*/
+void Pawn::display() const  {
+    std::cout << (isWhite ? "P" : "p");  // Print "P" for white pawn, "p" for black pawn
+}
 
-    
-    void helper(int x, int y){
+void helper(int x, int y) {
+    // Placeholder function (doesn't perform any action yet).
+}
 
-    }
-     /*
-    *
-    * Name:   getValidMoves Method
-    * Description:  Method to get the valid moves of the pawn
-    * Input:
-    *        board: to get access to board and know other pieces positions
-    *
-    * Output: Vector Containing the positions of valid moves for the pawn
-    *
-    *
-   */
-    std::vector<Position> Pawn::getValidMoves(ChessBoard & board) {
+/*
+*   getValidMoves Method
+*   This method returns all valid moves for the pawn.
+*   It checks the possible moves (forward and diagonal) and adds them to a vector.
+*
+* Input: board - reference to the chessboard, used for checking other pieces' positions
+*
+* Output: A vector containing all valid move positions for the pawn.
+*/
+std::vector<Position> Pawn::getValidMoves(ChessBoard & board) {
     // Create a vector to store all valid moves for the pawn
     std::vector<Position> validMoves;
 
-    /*
-        Get the current position (row and column) of the pawn.
-        We need to evaluate moves relative to this position.
-    */
+    // Get the current position (row and column) of the pawn
     int currentRow = pos.getRow();
     int currentCol = pos.getCol();
 
     /*
         Determine the direction in which the pawn moves.
-        If the pawn is white, it moves "up" the board (increasing row number).
-        If the pawn is black, it moves "down" the board (decreasing row number).
+        White pawns move forward (increase row), black pawns move backward (decrease row).
     */
     int forward = isWhite ? 1 : -1;
 
-    /*
-        Variables to store the potential new row and column values for
-        checking valid moves.
-    */
+    // Variables to store potential new row and column positions
     int newCol;
     int newRow;
 
     /*
-        Check if the square directly in front of the pawn is empty:
-        
-        - The column remains the same (the pawn only moves forward in a straight line).
-        - The row changes depending on the pawn's color (white or black).
-        - Ensure the new position is within the board boundaries (0 to 7).
-        - If the square is valid and empty, add it to the list of valid moves.
+        Check if the square directly in front of the pawn is empty.
+        This is the normal move (one square forward).
     */
     newCol = currentCol;
-    newRow = currentRow + forward;  // Move forward one row
+    newRow = currentRow + forward;  // Move one square forward
     if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+        // Check if the square is valid and not blocked
         if (board.check(newRow, newCol, isWhite, GetType())) {
-            validMoves.push_back(Position(newRow, newCol));  // Add valid move
+            validMoves.push_back(Position(newRow, newCol));  // Add the move to the list
         }
     }
 
     /*
-        Check if the square two squares in front of the pawn is empty:
-        
-        - This move is only possible if the pawn is making its first move.
-        - Similar to the previous check, but the row is two squares forward.
-        - Check if the square is within the board boundaries and empty.
+        Check if the square two squares in front of the pawn is empty.
+        This move is only allowed on the pawn's first move.
     */
     newCol = currentCol;
-    newRow = currentRow + 2 * forward;  // Move forward two rows for first move
+    newRow = currentRow + 2 * forward;  // Move two squares forward
     if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
-        // The pawn can only move two squares if it is the first move
+        // Only allowed if it's the first move and the path is clear
         if (FirstMove && board.check(newRow, newCol, isWhite, GetType())) {
-            validMoves.push_back(Position(newRow, newCol));  // Add valid move
+            validMoves.push_back(Position(newRow, newCol));  // Add the move to the list
         }
     }
 
     /*
-        Check if the pawn can capture an opponent piece:
-        
-        - Pawns capture diagonally, meaning the column changes by +1 or -1.
-        - The row moves forward as usual.
-        - We check both the right diagonal and left diagonal for an opponent's piece.
-        - Ensure the diagonal positions are within the board boundaries.
+        Check for possible capture moves (diagonal moves).
+        Pawns capture pieces that are one square diagonally in front of them.
     */
 
     // Check the right diagonal (column + 1)
     newCol = currentCol + 1;
-    newRow = currentRow + forward;  // Move one row forward
+    newRow = currentRow + forward;  // Move one square forward diagonally
     if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
-        /*
-            Call the check method to ensure there is an opponent's piece in that position.
-            The additional parameters (currentRow, currentCol, and `true`) are used for the capture logic.
-        */
+        // Ensure there is an opponent's piece to capture in that position
         if (board.check(newRow, newCol, isWhite, GetType(), currentRow, currentCol, true)) {
-            validMoves.push_back(Position(newRow, newCol));  // Add valid move for capture
+            validMoves.push_back(Position(newRow, newCol));  // Add capture move
         }
     }
 
     // Check the left diagonal (column - 1)
     newCol = currentCol - 1;
-    newRow = currentRow + forward;  // Move one row forward
+    newRow = currentRow + forward;  // Move one square forward diagonally
     if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
-        /*
-            Similar to the right diagonal, call the check method for capturing an opponent's piece.
-        */
+        // Ensure there is an opponent's piece to capture in that position
         if (board.check(newRow, newCol, isWhite, GetType(), currentRow, currentCol, true)) {
-            validMoves.push_back(Position(newRow, newCol));  // Add valid move for capture
+            validMoves.push_back(Position(newRow, newCol));  // Add capture move
         }
     }
 
-    /*
-        Return the list of valid moves.
-        This could be a list of one or more valid positions, or an empty list if no valid moves are available.
-    */
+    // Return the vector of valid moves
     return validMoves;
 }
