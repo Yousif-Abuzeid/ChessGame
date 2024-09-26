@@ -39,7 +39,7 @@ Parameters:
     - counter: Reference to an integer that keeps track of the number of turns taken.
     - isWhite: Boolean reference to indicate if it's White's turn or not.
 */
-void WhosTurn(int &counter, bool isWhite) {
+void WhosTurn(int &counter, bool& isWhite) {
     if (counter % 2 == 0) { // Check if the counter is even
         counter++; // Increment the counter for the next turn
         std::cout << "White's Move" << std::endl; // Notify that it's White's turn

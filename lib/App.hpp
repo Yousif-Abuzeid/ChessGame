@@ -16,7 +16,7 @@ Parameters:
                which is used to determine the current player's turn.
     - isWhite: Boolean indicating whether the current turn belongs to the white player.
 */
-void WhosTurn(int &counter, bool isWhite);
+void WhosTurn(int &counter, bool& isWhite);
 
 /*
 Function to parse the player's move input from a string.
