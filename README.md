@@ -8,7 +8,13 @@ simple chess game made using c++
 
 ```bash
 
-g++ main.cpp src/ChessBoard.cpp src/Piece.cpp src/App.cpp -o chessgame && ./chessgame
+mkdir build
+cd build
+cmake  -G "Unix Makefiles" ..
+
+make
+
+./ChessGame
 
 ```
 
