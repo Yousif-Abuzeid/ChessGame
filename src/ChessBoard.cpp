@@ -1,5 +1,5 @@
 #include "../lib/ChessBoard.hpp"
-#include "../lib/Pieces.hpp"
+
 #include <iostream>
 #include <ostream>
 
